@@ -1,4 +1,9 @@
 package com.example.UserInteractionApplication.repository;
 
-public class ScoreRepo {
+import com.example.UserInteractionApplication.model.Score;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ScoreRepo extends MongoRepository<Score, String> {
+
 }
+
