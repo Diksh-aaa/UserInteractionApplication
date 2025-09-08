@@ -1,6 +1,7 @@
 package com.example.UserInteractionApplication.service;
 
 import com.example.UserInteractionApplication.model.Score;
+import com.example.UserInteractionApplication.model.User;
 import com.example.UserInteractionApplication.repository.ScoreRepo;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,16 @@ public class ScoreService {
 
     private final ScoreRepo scoreRepo;
 
-    public ScoreService(ScoreRepo scoreRepository) {
-        this.scoreRepo = scoreRepository;
-    }
+    public ScoreService(ScoreRepo scoreRepo) { this.scoreRepo = scoreRepo; }
 
-    public Score addScore(UUID userId, int points) {
+    public Score addScore(User user, int points) {
         Score score = new Score();
-        score.setUserId(userId);
+        score.setUser(user);
         score.setPoints(points);
         return scoreRepo.save(score);
     }
 
-    public List<Score> getAllScores() { return scoreRepo.findAll(); }
+    public List<Score> getScoresForUser(UUID userId) {
+        return scoreRepo.findByUserId(userId);
+    }
 }

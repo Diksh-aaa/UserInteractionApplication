@@ -13,15 +13,15 @@ public class UserService {
 
     private final UserRepo userRepo;
 
-    public UserService(UserRepo userRepository, UserRepo userRepo) {
-        UserRepo userRepo1;
-        userRepo1 = userRepo;
-        this.userRepo = userRepo1;
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
     public User createUser(User user) { return userRepo.save(user); }
+
     public List<User> getAllUsers() { return userRepo.findAll(); }
+
     public Optional<User> getUserById(UUID id) { return userRepo.findById(id); }
+
     public void deleteUser(UUID id) { userRepo.deleteById(id); }
 }
-

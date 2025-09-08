@@ -17,15 +17,22 @@ public class UserController {
     public UserController(UserService userService) { this.userService = userService; }
 
     @PostMapping
-    public User createUser(@RequestBody User user) { return userService.createUser(user); }
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
+    }
 
     @GetMapping
-    public List<User> getAllUsers() { return userService.getAllUsers(); }
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable UUID id) { return userService.getUserById(id); }
+    public Optional<User> getUserById(@PathVariable UUID id) {
+        return userService.getUserById(id);
+    }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable UUID id) { userService.deleteUser(id); }
+    public void deleteUser(@PathVariable UUID id) {
+        userService.deleteUser(id);
+    }
 }
-

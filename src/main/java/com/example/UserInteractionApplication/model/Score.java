@@ -1,27 +1,29 @@
 package com.example.UserInteractionApplication.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 import java.util.UUID;
 
-@Document(collection = "scores")
-
+@Entity
+@Table(name = "scores")
 public class Score {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
 
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private int points;
 
     // Getters & setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public UUID getUserId() { return userId; }
-    public void setUserId(UUID userId) { this.userId = userId; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public int getPoints() { return points; }
     public void setPoints(int points) { this.points = points; }
 }
-

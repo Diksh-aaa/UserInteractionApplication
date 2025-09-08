@@ -1,10 +1,13 @@
 package com.example.UserInteractionApplication.controller;
 
 import com.example.UserInteractionApplication.model.Score;
+import com.example.UserInteractionApplication.model.User;
 import com.example.UserInteractionApplication.service.ScoreService;
+import com.example.UserInteractionApplication.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -12,15 +15,25 @@ import java.util.UUID;
 public class ScoreController {
 
     private final ScoreService scoreService;
+    private final UserService userService;
 
-    public ScoreController(ScoreService scoreService) { this.scoreService = scoreService; }
+    public ScoreController(ScoreService scoreService, UserService userService) {
+        this.scoreService = scoreService;
+        this.userService = userService;
+    }
 
     @PostMapping("/{userId}")
     public Score addScore(@PathVariable UUID userId, @RequestParam int points) {
-        return scoreService.addScore(userId, points);
+        Optional<User> userOpt = userService.getUserById(userId);
+        if (userOpt.isPresent()) {
+            return scoreService.addScore(userOpt.get(), points);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
-    @GetMapping
-    public List<Score> getAllScores() { return scoreService.getAllScores(); }
+    @GetMapping("/{userId}")
+    public List<Score> getScoresForUser(@PathVariable UUID userId) {
+        return scoreService.getScoresForUser(userId);
+    }
 }
-

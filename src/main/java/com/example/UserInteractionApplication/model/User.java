@@ -9,8 +9,8 @@ public class User {
 
     @Id
     @GeneratedValue
-
     private UUID id;
+
     private String name;
     private String email;
 
