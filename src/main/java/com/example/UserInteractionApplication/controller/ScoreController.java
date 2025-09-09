@@ -9,19 +9,51 @@ import java.util.List;
 @RestController
 @RequestMapping("/scores")
 public class ScoreController {
+
     private final ScoreService scoreService;
 
     public ScoreController(ScoreService scoreService) {
         this.scoreService = scoreService;
     }
 
-    @PostMapping("/{userId}")
-    public Score addScore(@PathVariable Long userId, @RequestParam int points) {
-        return scoreService.addScore(userId, points);
+    // Inner class for leaderboard response (no separate DTO file)
+    public static class LeaderboardEntry {
+        private String username;
+        private int score;
+
+        public LeaderboardEntry(String username, int score) {
+            this.username = username;
+            this.score = score;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public int getScore() {
+            return score;
+        }
     }
 
-    @GetMapping("/{userId}")
-    public List<Score> getScoresByUser(@PathVariable Long userId) {
-        return scoreService.getScoresByUser(userId);
+    @PostMapping
+    public Score createScore(@RequestBody Score score) {
+        return scoreService.createScore(score);
+    }
+
+    @GetMapping
+    public List<Score> getAllScores() {
+        return scoreService.getAllScores();
+    }
+
+    // 🔥 Leaderboard API
+    @GetMapping("/leaderboard")
+    public List<LeaderboardEntry> getTop3Scores() {
+        return scoreService.getTop3Scores()
+                .stream()
+                .map(score -> new LeaderboardEntry(
+                        score.getUser().getName(),
+                        score.getValue()
+                ))
+                .toList();
     }
 }
