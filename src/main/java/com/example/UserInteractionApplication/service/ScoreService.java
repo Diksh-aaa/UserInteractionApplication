@@ -1,6 +1,7 @@
 package com.example.UserInteractionApplication.service;
 
 import com.example.UserInteractionApplication.model.Score;
+import com.example.UserInteractionApplication.model.User;
 import com.example.UserInteractionApplication.repository.ScoreRepo;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,10 @@ public class ScoreService {
         return scoreRepository.save(score);
     }
 
-    public List<Score> getAllScores() {
-        return scoreRepository.findAll();
+    public List<Score> getScoresByUser(User user) {
+        return scoreRepository.findByUser(user);
     }
 
-    // 🔥 Fetch top 3 scores directly from DB
     public List<Score> getTop3Scores() {
         return scoreRepository.findTop3ByOrderByValueDesc();
     }
