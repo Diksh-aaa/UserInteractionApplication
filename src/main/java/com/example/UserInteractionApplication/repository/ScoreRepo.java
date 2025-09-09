@@ -1,10 +1,13 @@
 package com.example.UserInteractionApplication.repository;
 
 import com.example.UserInteractionApplication.model.Score;
+import com.example.UserInteractionApplication.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
-public interface ScoreRepo extends JpaRepository<Score, UUID> {
-    List<Score> findByUserId(UUID userId);
+import java.util.List;
+
+@Repository
+public interface ScoreRepo extends JpaRepository<Score, Long> {
+    List<Score> findByUser(User user);
 }
