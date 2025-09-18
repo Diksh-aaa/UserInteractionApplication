@@ -1,11 +1,16 @@
+// src/main/java/com/example/UserInteractionApplication/model/User.java
 package com.example.UserInteractionApplication.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -14,13 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    private String name; // This field stores the user's name
 
-    public User() {}
-
-    public User(String name) {
-        this.name = name;
-    }
-
+    // REMOVED: Redundant manual setter
+    // public void setName(String name) { }
 }

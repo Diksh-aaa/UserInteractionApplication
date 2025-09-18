@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins ="http://localhost:4200",
+        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE},
+        maxAge=3600)
 @RestController
 @RequestMapping("/scores")
 public class ScoreController {
@@ -22,25 +25,25 @@ public class ScoreController {
 
     // Inner class to return user info + score
     public static class PlayerScore {
-        private Long userId;
+        private int userId;
         private String username;
         private int score;
 
-        public PlayerScore(Long userId, String username, int score) {
+        public PlayerScore(int userId, String username, int score) {
             this.userId = userId;
             this.username = username;
             this.score = score;
         }
 
-        public Long getUserId() { return userId; }
+        public int getUserId() { return userId; }
         public String getUsername() { return username; }
         public int getScore() { return score; }
     }
 
     // POST score by userId
     @PostMapping
-    public PlayerScore postScore(@RequestParam Long userId, @RequestParam int scoreValue) {
-        User user = userRepository.findById(userId)
+    public PlayerScore postScore(@RequestParam Long userID, @RequestParam int scoreValue) {
+        User user = userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Score score = new Score();
@@ -48,7 +51,7 @@ public class ScoreController {
         score.setValue(scoreValue);
 
         Score savedScore = scoreService.createScore(score);
-        return new PlayerScore(user.getId(), user.getName(), savedScore.getValue());
+        return new PlayerScore(Math.toIntExact(user.getId()), user.getName(), savedScore.getValue());
     }
 
     // GET scores for a specific user by userId
@@ -58,7 +61,7 @@ public class ScoreController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return scoreService.getScoresByUser(user).stream()
-                .map(score -> new PlayerScore(user.getId(), user.getName(), score.getValue()))
+                .map(score -> new PlayerScore(Math.toIntExact(user.getId()), user.getName(), score.getValue()))
                 .toList();
     }
 
@@ -67,7 +70,7 @@ public class ScoreController {
     public List<PlayerScore> getTop3Scores() {
         return scoreService.getTop3Scores().stream()
                 .map(score -> new PlayerScore(
-                        score.getUser().getId(),
+                        Math.toIntExact(score.getUser().getId()),
                         score.getUser().getName(),
                         score.getValue()
                 ))
